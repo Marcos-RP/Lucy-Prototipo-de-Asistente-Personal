@@ -54,7 +54,7 @@ writer.writeheader()
 writer.writerows(datos)
 
 encriptacion.datos_descifrados[f"Datos_Cifrados/{archivo_csv}_csv.enc"] = datos_finales.getvalue().encode("utf-8")
-encriptacion.guardar_csv(f"Datos_Cifrados/{archivo_csv}_csv.enc", context=f"{archivo_csv}_csv")
+encriptacion.guardar_csv(f"Datos_Cifrados/{archivo_csv}_csv.enc", contexto=f"{archivo_csv}_csv")
 
 print("\nDatos agregado exitosamente.")
 

@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
             'nombre': None
         }
 
-        self.encriptacion.guardar_json("Datos_Cifrados/sesion_json.enc", context="sesion_json")
+        self.encriptacion.guardar_json("Datos_Cifrados/sesion_json.enc", contexto="sesion_json")
 
         self.cambiar_ventana(b_sesion.MainWindow)
 

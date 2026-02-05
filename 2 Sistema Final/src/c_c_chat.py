@@ -7,7 +7,7 @@ from PyQt5.QtGui import QIcon
 import speech_recognition as sr
 from PyQt5.QtWidgets import (QMainWindow, QLabel, QWidget, QFormLayout, QMessageBox, QScrollArea, QVBoxLayout, QFrame, QSpacerItem, QSizePolicy, QApplication)
 
-import c_a_aplicacion_inicial, d_c_chat, z_estilos
+from . import c_a_aplicacion_inicial, d_c_chat, z_estilos
 
 
 

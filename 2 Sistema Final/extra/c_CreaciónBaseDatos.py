@@ -180,7 +180,7 @@ encriptacion = b_Codigo.Encriptacion()
 with open("data/DatosPeliculasSeries.csv", "rb") as f:
     encriptacion.datos_descifrados["../data/DatosPeliculasSeries_csv.enc"] = f.read()
 
-encriptacion.guardar_csv("../data/DatosPeliculasSeries_csv.enc", context="DatosPeliculasSeries_csv")
+encriptacion.guardar_csv("../data/DatosPeliculasSeries_csv.enc", contexto="DatosPeliculasSeries_csv")
 print("\nDatosPeliculasSeries_csv cifrado exitosamente.")
 
 

@@ -67,10 +67,10 @@ class MainWindow(QMainWindow):
         self.setGeometry(int(width * 0.25), int(height * 0.125), int(width * 0.5), int(height * 0.75))
         self.setMinimumSize(800, 500)
 
-        self.general = pd.read_csv(BytesIO(self.encriptacion.cargar_csv("data/general_csv.enc", context="general_csv")))
-        self.peliculas = pd.read_csv(BytesIO(self.encriptacion.cargar_csv("data/DatosPeliculasSeries_csv.enc", context="DatosPeliculasSeries_csv")))
-        self.pun_com = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{id}_completo_csv.enc", context=f"{id}_completo_csv")))
-        self.pun = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{id}_csv.enc", context=f"{id}_csv")))
+        self.general = pd.read_csv(BytesIO(self.encriptacion.cargar_csv("data/general_csv.enc", contexto="general_csv")))
+        self.peliculas = pd.read_csv(BytesIO(self.encriptacion.cargar_csv("data/DatosPeliculasSeries_csv.enc", contexto="DatosPeliculasSeries_csv")))
+        self.pun_com = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{id}_completo_csv.enc", contexto=f"{id}_completo_csv")))
+        self.pun = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{id}_csv.enc", contexto=f"{id}_csv")))
         self.rows, self.columns = self.pun_com.shape
 
         self.usuario_peliculas = d_b_titulos.Pred_Rec(self.nombre, self.id, self.encriptacion, self.general, self.peliculas)
@@ -289,11 +289,11 @@ class MainWindow(QMainWindow):
 
         self.pun_com = pd.concat([self.pun_com, pd.DataFrame([nueva_fila])])
         self.encriptacion.datos_descifrados[f"data/{self.id}_completo_csv.enc"]= self.pun_com.to_csv(index=True).encode()
-        self.encriptacion.guardar_csv(f"data/{self.id}_completo_csv.enc", context=f"{self.id}_completo_csv")
+        self.encriptacion.guardar_csv(f"data/{self.id}_completo_csv.enc", contexto=f"{self.id}_completo_csv")
 
         self.pun = pd.concat([self.pun, pd.DataFrame([nueva_fila2])])
         self.encriptacion.datos_descifrados[f"data/{self.id}_csv.enc"] = self.pun.to_csv(index=False).encode()
-        self.encriptacion.guardar_csv(f"data/{self.id}_csv.enc", context=f"{self.id}_csv")
+        self.encriptacion.guardar_csv(f"data/{self.id}_csv.enc", contexto=f"{self.id}_csv")
 
         self.rows, self.columns = self.pun_com.shape
 

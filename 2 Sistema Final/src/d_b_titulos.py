@@ -41,15 +41,15 @@ class Pred_Rec:
         archivos = glob(os.path.join("data", "*_csv.enc"))
 
         matriz = self.general
-        self.pun_com = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{self.id}_completo_csv.enc", context=f"{self.id}_completo_csv")))
-        self.pun = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{self.id}_csv.enc", context=f"{self.id}_csv")))
+        self.pun_com = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{self.id}_completo_csv.enc", contexto=f"{self.id}_completo_csv")))
+        self.pun = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{self.id}_csv.enc", contexto=f"{self.id}_csv")))
 
         for archivo in archivos:
             nombre_base = os.path.basename(archivo)
             partes = nombre_base.split("_")
 
             if len(partes) == 2 and partes[0].isdigit() and partes[1] == "csv.enc":
-                archivo = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{partes[0]}_csv.enc", context=f"{partes[0]}_csv")))
+                archivo = pd.read_csv(BytesIO(self.encriptacion.cargar_csv(f"data/{partes[0]}_csv.enc", contexto=f"{partes[0]}_csv")))
                 matriz = pd.concat([matriz, archivo])
 
         self.pun = self.pun.rename(columns={"Mi Nota": "Nota Usuario"})
@@ -113,7 +113,7 @@ class Pred_Rec:
             recomendacion = final.merge(self.pun["tid"], on="tid", how='left', indicator=True)
             recomendacion = recomendacion[recomendacion['_merge'] == 'left_only'].drop(columns=['_merge'])
             recomendacion = recomendacion[recomendacion['Mi Nota'] >= 7.5]
-
+            recomendacion = recomendacion.sort_values(["Mi Nota", "Num_Votos", "Puntuacion"], ascending=False)
 
         if len(recomendacion) == 0:
             #print("Personal")
@@ -160,8 +160,8 @@ class Pred_Rec:
 
             recomendacion = recomendacion.merge(self.pun_com["tid"], on="tid", how='left', indicator=True)
             recomendacion = recomendacion[recomendacion['_merge'] == 'left_only'].drop(columns=['_merge'])
+            recomendacion = recomendacion.sort_values(["Num_Votos", "Puntuacion"], ascending=False)
 
-        recomendacion = recomendacion.sort_values(["Num_Votos", "Puntuacion"], ascending=False)
         return recomendacion.head(100)
 
 

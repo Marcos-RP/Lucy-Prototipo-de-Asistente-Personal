@@ -26,7 +26,7 @@ for archivo_json in archivos_json:
     with open(archivo, "r", encoding="utf-8") as f:
         encriptacion.datos_descifrados[f"Datos_Cifrados/{archivo_json[1]}_json.enc"] = json.load(f)
 
-    encriptacion.guardar_json(f"Datos_Cifrados/{archivo_json[1]}_json.enc", context=f"{archivo_json[1]}_json")
+    encriptacion.guardar_json(f"Datos_Cifrados/{archivo_json[1]}_json.enc", contexto=f"{archivo_json[1]}_json")
     print(f"\n{archivo_json[1]}_json cifrado exitosamente.")
 
 
@@ -45,5 +45,5 @@ for archivo_csv in archivos_csv:
     with open(f"{archivo_csv[0]}.csv", "rb") as f:
         encriptacion.datos_descifrados[f"Datos_Cifrados/{archivo_csv[1]}_csv.enc"] = f.read()
 
-    encriptacion.guardar_csv(f"Datos_Cifrados/{archivo_csv[1]}_csv.enc", context=f"{archivo_csv[1]}_csv")
+    encriptacion.guardar_csv(f"Datos_Cifrados/{archivo_csv[1]}_csv.enc", contexto=f"{archivo_csv[1]}_csv")
     print(f"\n{archivo_csv[1]}_csv cifrado exitosamente.")

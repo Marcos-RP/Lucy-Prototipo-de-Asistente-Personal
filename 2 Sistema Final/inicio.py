@@ -15,14 +15,14 @@ def main():
     encriptacion = d_a_cripto.Encriptacion()
 
     try:
-        users = encriptacion.cargar_json("data/users_json.enc", context="users_json")
+        users = encriptacion.cargar_json("data/users_json.enc", contexto="users_json")
         if not isinstance(users, dict):
             users = {}
     except (FileNotFoundError, json.JSONDecodeError):
         users = {}
 
     try:
-        sesion = encriptacion.cargar_json("data/sesion_json.enc", context="sesion_json")
+        sesion = encriptacion.cargar_json("data/sesion_json.enc", contexto="sesion_json")
         if not isinstance(sesion, dict):
             sesion = {}
     except (FileNotFoundError, json.JSONDecodeError):

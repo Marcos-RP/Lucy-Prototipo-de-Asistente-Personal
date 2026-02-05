@@ -90,7 +90,7 @@ class MainWindow(QMainWindow):
             'nombre': self.nombre
         }
 
-        self.encriptacion.guardar_json("data/sesion_json.enc", context="sesion_json")
+        self.encriptacion.guardar_json("data/sesion_json.enc", contexto="sesion_json")
 
         self.window = c_a_aplicacion_inicial.MainWindow(self.width, self.height, self.nombre, self.id, self.encriptacion)
         self.window.show()
@@ -184,15 +184,15 @@ class MainWindow(QMainWindow):
     # ============================
 
     def generacion_archivos(self, numero):
-        self.encriptacion.guardar_json("data/users_json.enc", context="users_json")
+        self.encriptacion.guardar_json("data/users_json.enc", contexto="users_json")
 
         csv_header = "userId,Mi Nota,tid\n"
         self.encriptacion.datos_descifrados[f"data/{numero}_csv.enc"] = csv_header.encode()
-        self.encriptacion.guardar_csv(f"data/{numero}_csv.enc", context=f"{numero}_csv")
+        self.encriptacion.guardar_csv(f"data/{numero}_csv.enc", contexto=f"{numero}_csv")
 
         csv_header_completo = "userId,tid,Fecha,Tipo,Titulo,Titulo_ES,Año,Mi Nota,Duracion,Generos,Puntuacion,Num_Votos,Actores,Directores,Idioma\n"
         self.encriptacion.datos_descifrados[f"data/{numero}_completo_csv.enc"] = csv_header_completo.encode()
-        self.encriptacion.guardar_csv(f"data/{numero}_completo_csv.enc", context=f"{numero}_completo_csv")
+        self.encriptacion.guardar_csv(f"data/{numero}_completo_csv.enc", contexto=f"{numero}_completo_csv")
 
 
 

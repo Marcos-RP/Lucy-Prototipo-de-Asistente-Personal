@@ -61,5 +61,5 @@ encriptacion = b_Codigo.Encriptacion()
 with open("data/general.csv", "rb") as f:
     encriptacion.datos_descifrados["../data/general_csv.enc"] = f.read()
 
-encriptacion.guardar_csv("../data/general_csv.enc", context="general_csv")
+encriptacion.guardar_csv("../data/general_csv.enc", contexto="general_csv")
 print("\ngeneral_csv cifrado exitosamente.")

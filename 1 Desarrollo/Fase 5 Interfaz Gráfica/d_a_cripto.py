@@ -33,12 +33,12 @@ LUCY_KEY_VERSION = LUCY_KEY_VERSION
 # Derivación de claves con HKDF
 # ============================
 
-def derivar_clave(contexto):
+def derivar_clave(contexto, salt):
 
     clave_derivada = HKDF(
         algorithm=hashes.SHA256(),
         length=32,
-        salt=None,
+        salt=salt,
         info=(contexto + LUCY_KEY_VERSION).encode(),
         backend=default_backend()
     ).derive(LUCY_MASTER_KEY)
@@ -51,15 +51,24 @@ def derivar_clave(contexto):
 # Cifrado y descifrado con AES-GCM
 # ============================
 
-def cifrado(datos, llave):
+def cifrado(datos, contexto):
+    salt = os.urandom(16)
     nonce = os.urandom(12)
-    aesgcm = AESGCM(llave)
-    return nonce + aesgcm.encrypt(nonce, datos, None)
 
-def descifrado(datos_cifrados, llave):
-    nonce = datos_cifrados[:12]
-    ciphertext = datos_cifrados[12:]
+    llave = derivar_clave(contexto, salt)
     aesgcm = AESGCM(llave)
+
+    ciphertext = aesgcm.encrypt(nonce, datos, None)
+    return salt + nonce + ciphertext
+
+def descifrado(datos_cifrados, contexto):
+    salt = datos_cifrados[:16]
+    nonce = datos_cifrados[16:28]
+    ciphertext = datos_cifrados[28:]
+
+    llave = derivar_clave(contexto, salt)
+    aesgcm = AESGCM(llave)
+
     return aesgcm.decrypt(nonce, ciphertext, None)
 
 
@@ -73,39 +82,32 @@ class Encriptacion:
         self.datos_descifrados = {}
 
 
-    def cargar_json(self, path, context):
+    def cargar_json(self, path, contexto):
         if path not in self.datos_descifrados:
-
-            llave = derivar_clave(context)
             with open(path, "rb") as f:
                 datos_cifrados = f.read()
 
-            self.datos_descifrados[path] = json.loads(descifrado(datos_cifrados, llave).decode())
+            self.datos_descifrados[path] = json.loads(descifrado(datos_cifrados, contexto).decode())
 
         return self.datos_descifrados[path]
 
-    def cargar_csv(self, path, context):
+    def cargar_csv(self, path, contexto):
         if path not in self.datos_descifrados:
-
-            llave = derivar_clave(context)
             with open(path, "rb") as f:
                 datos_cifrados = f.read()
 
-            self.datos_descifrados[path] = descifrado(datos_cifrados, llave)
+            self.datos_descifrados[path] = descifrado(datos_cifrados, contexto)
 
         return self.datos_descifrados[path]
 
 
 
-    def guardar_json(self, path, context):
+    def guardar_json(self, path, contexto):
         datos = json.dumps(self.datos_descifrados[path], indent=2).encode()
 
-        llave = derivar_clave(context)
         with open(path, "wb") as f:
-            f.write(cifrado(datos, llave))
+            f.write(cifrado(datos, contexto))
 
-    def guardar_csv(self, path, context):
-
-        llave = derivar_clave(context)
+    def guardar_csv(self, path, contexto):
         with open(path, "wb") as f:
-            f.write(cifrado(self.datos_descifrados[path], llave))
+            f.write(cifrado(self.datos_descifrados[path], contexto))
