@@ -81,9 +81,17 @@ class Pred_Rec:
 
         else:
             puntuaciones = similitud.merge(matriz, on="userId", how="left")
-            puntuaciones = puntuaciones.groupby("tid", as_index=False)["Mi Nota"].mean()
-            puntuaciones["Mi Nota"] = (
-                puntuaciones["Mi Nota"]
+            puntuaciones["Mi Nota"] = pd.to_numeric(puntuaciones["Mi Nota"], errors="coerce")
+            puntuaciones = (
+                puntuaciones
+                .groupby("tid", as_index=False)
+                .agg(
+                    Nota_Media=("Mi Nota", "mean"),
+                    Num_Usuarios=("Mi Nota", "count")
+                )
+            )
+            puntuaciones["Nota_Media"] = (
+                puntuaciones["Nota_Media"]
                 .round()
                 .clip(1, 10)
                 .astype(int)
@@ -95,7 +103,7 @@ class Pred_Rec:
                 how="left"
             )
 
-            self.usuarios_comunes = puntuaciones_datos[['tid', 'Tipo', 'Titulo', 'Titulo_ES', 'Año', 'Mi Nota', 'Duracion', 'Generos', 'Puntuacion', 'Num_Votos', 'Actores', 'Directores', 'Idioma']]
+            self.usuarios_comunes = puntuaciones_datos[['tid', 'Tipo', 'Titulo', 'Titulo_ES', 'Año', 'Num_Usuarios', 'Nota_Media', 'Duracion', 'Generos', 'Puntuacion', 'Num_Votos', 'Actores', 'Directores', 'Idioma']]
 
 
 
@@ -112,8 +120,8 @@ class Pred_Rec:
 
             recomendacion = final.merge(self.pun["tid"], on="tid", how='left', indicator=True)
             recomendacion = recomendacion[recomendacion['_merge'] == 'left_only'].drop(columns=['_merge'])
-            recomendacion = recomendacion[recomendacion['Mi Nota'] >= 7.5]
-            recomendacion = recomendacion.sort_values(["Mi Nota", "Num_Votos", "Puntuacion"], ascending=False)
+            recomendacion = recomendacion[recomendacion['Nota_Media'] >= 7.5]
+            recomendacion = recomendacion.sort_values(["Num_Usuarios", "Nota_Media", "Num_Votos", "Puntuacion"], ascending=False)
 
         if len(recomendacion) == 0:
             #print("Personal")
@@ -174,7 +182,7 @@ class Pred_Rec:
 
         final = self.usuarios_comunes
 
-        conteo = int((final["Mi Nota"].value_counts().min()) * 1.5)
+        conteo = int((final["Nota_Media"].value_counts().min()) * 1.5)
 
         def eleccion_clases(df, conteo):
             n = len(df)
@@ -185,20 +193,20 @@ class Pred_Rec:
 
         df_balanceado = (
             final
-            .groupby("Mi Nota", group_keys=False)
+            .groupby("Nota_Media", group_keys=False)
             .apply(eleccion_clases, conteo)
         )
 
 
-        df_datos_reg = df_balanceado[['Tipo', 'Año', 'Duracion', 'Puntuacion', 'Num_Votos', 'Generos', 'Mi Nota']].copy()
+        df_datos_reg = df_balanceado[['Tipo', 'Año', 'Duracion', 'Puntuacion', 'Num_Votos', 'Generos', 'Nota_Media']].copy()
         dummies = df_datos_reg["Generos"].str.get_dummies(sep=",")
         dummies2 = df_datos_reg["Tipo"].str.get_dummies(sep=",")
         df_datos_reg = df_datos_reg.join(dummies2).drop(columns=["Tipo"])
         df_datos_reg = df_datos_reg.join(dummies).drop(columns=["Generos"])
-        df_datos_reg['Mi Nota'] /= 10
+        df_datos_reg['Nota_Media'] /= 10
 
 
-        col_gen = ['Año', 'Duracion', 'Puntuacion', 'Num_Votos', 'Mi Nota', 'movie', 'tvSeries', 'tvMiniSeries',
+        col_gen = ['Año', 'Duracion', 'Puntuacion', 'Num_Votos', 'Nota_Media', 'movie', 'tvSeries', 'tvMiniSeries',
                    'tvSpecial', 'Thriller', 'Horror', 'Documentary', 'Sci-Fi', 'Romance', 'Drama', 'Sport', 'War', 'Biography',
                    'Musical', 'Crime', 'Music', 'Action', 'Short', 'History', 'Comedy', 'Mystery', 'Animation', 'Adventure',
                    'Family', 'Fantasy', 'Game-Show', 'Adult', 'Western', 'Talk-Show', 'Film-Noir']
@@ -209,8 +217,8 @@ class Pred_Rec:
 
         df_datos_reg = df_datos_reg[col_gen]
 
-        X_reg = df_datos_reg.drop("Mi Nota", axis=1)
-        y_reg = df_datos_reg["Mi Nota"]
+        X_reg = df_datos_reg.drop("Nota_Media", axis=1)
+        y_reg = df_datos_reg["Nota_Media"]
 
 
         modelo = Pipeline([

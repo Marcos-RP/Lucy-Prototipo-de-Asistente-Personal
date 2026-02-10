@@ -5,24 +5,17 @@
 from openai import OpenAI
 import subprocess, requests, datetime, json, os
 
-
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 GOOGLE_CSE_ID = os.environ.get("GOOGLE_CSE_ID")
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
 
+if not all([OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CSE_ID, BOT_TOKEN, CHAT_ID]):
+    print("ERROR: Faltan variables de entorno. Verifica tus API KEYS.")
+    exit()
 
-#if not all([OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CSE_ID, BOT_TOKEN, CHAT_ID]):
-#    print("ERROR: Faltan variables de entorno. Verifica tus API KEYS.")
-#    exit()
-"""
-OPENAI_API_KEY = ""
-GOOGLE_API_KEY = ""
-GOOGLE_CSE_ID = ""
-BOT_TOKEN = ""
-CHAT_ID = ""
-"""
+
 
 # =====================================
 # Definición de las herramientas

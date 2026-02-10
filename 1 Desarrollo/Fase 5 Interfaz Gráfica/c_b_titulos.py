@@ -20,15 +20,16 @@ import c_a_aplicacion_inicial, d_b_titulos, z_estilos
 
 MENSAJE_INICIAL = """
 <b>Bienvenido a la funcionalidad principal de Lucy.</b><br><br>
-En este pestaña tienes 5 principales acciones:<br><br>
+En esta pestaña se encuentran cinco acciones principales:<br><br>
 <ul>
-    <li><b>Recomendaciones:</b> Te recomendará películas o series en función de los títulos que hayas evaluado.</li><br>
-    <li><b>Predicción:</b> Te permitirá comprobar si una película o serie se adecuada lo que sueles ver.</li><br>
-    <li><b>Puntuar Película:</b> Te permitirá puntuar películas o series.</li><br>
-    <li><b>Ver Puntuaciones:</b> Te permitirá ver qué títulos has evaluado.</li><br>
-    <li><b>Búsqueda Personalizada:</b> Te permitirá hacer una búsqueda puntual de una película o serie en base a nuevos parámetros.</li><br>
+    <li><b>Recomendaciones:</b> Genera sugerencias de películas o series en función de los títulos evaluados previamente.</li><br>
+    <li><b>Predicción:</b> Permite comprobar si una película o serie se ajusta a los hábitos de visualización.</li><br>
+    <li><b>Puntuar Película:</b> Permite puntuar películas o series.</li><br>
+    <li><b>Ver Puntuaciones:</b> Permite consultar los títulos que han sido evaluados.</li><br>
+    <li><b>Búsqueda Personalizada:</b> Permite realizar búsquedas específicas de películas o series según nuevos parámetros.</li><br>
 </ul>
 """
+
 
 
 
@@ -64,7 +65,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Lucy")
         self.setWindowIcon(QIcon("z_icon.png"))
         self.setStyleSheet(z_estilos.setStyleSheet)
-        self.setGeometry(int(width * 0.25), int(height * 0.125), int(width * 0.5), int(height * 0.75))
+        self.setGeometry(int(width * 0.125), int(height * 0.125), int(width * 0.75), int(height * 0.75))
         self.setMinimumSize(800, 500)
 
         self.general = pd.read_csv(BytesIO(self.encriptacion.cargar_csv("Datos_Cifrados/general_csv.enc", contexto="general_csv")))
@@ -90,23 +91,39 @@ class MainWindow(QMainWindow):
             self.mensaje = True
             self.mensaje_inicial()
 
-
     def mensaje_inicial(self):
-
         mensaje = QMessageBox(self)
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
+        mensaje.setWindowTitle("Lucy — Panel de Películas y Series")
         mensaje.setText(MENSAJE_INICIAL)
 
         mensaje.setStandardButtons(QMessageBox.Ok)
+        mensaje.button(QMessageBox.Ok).setText("Continuar")
+
         mensaje.setStyleSheet("""
-                    QLabel {
-                        font-size: 14px;
-                        min-width: 750px;
-                        min-height: 300px;
-                    }
-                """)
+            QLabel {
+                color: #000000;
+                font-size: 18px;
+                min-width: 800px;
+                min-height: 360px;
+                padding: 12px;
+            }
+
+            QPushButton {
+                background-color: #2d89ef;
+                color: white;
+                padding: 8px 24px;
+                border-radius: 6px;
+                font-size: 18px;
+            }
+
+            QPushButton:hover {
+                background-color: #3aa0ff;
+            }
+        """)
+
         mensaje.exec_()
 
 
@@ -158,7 +175,7 @@ class MainWindow(QMainWindow):
             if self.rows > 0:
                 rec = self.usuario_peliculas.recomendacion()
             else:
-                QMessageBox.warning(self, "Datos Insuficientes", "Debes de tener al menos 1 película o serie puntuada.")
+                QMessageBox.warning(self, "Datos insuficientes", "Se requiere al menos una película o serie puntuada.")
                 return
         else:
             rec = self.usuario_peliculas.busqueda_concreta(datos)
@@ -187,7 +204,7 @@ class MainWindow(QMainWindow):
             finally:
                 QApplication.restoreOverrideCursor()
         else:
-            QMessageBox.warning(self, "Datos Insuficientes", "Debes de tener al menos 1 película o serie puntuada.")
+            QMessageBox.warning(self, "Datos insuficientes", "Se requiere al menos una película o serie puntuada.")
             return
 
         mensaje = QMessageBox(self)
@@ -195,7 +212,7 @@ class MainWindow(QMainWindow):
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
-        mensaje.setText(f"La probabilidad de que te guste {Titulo_ES} es de un {probabilidad}%.")
+        mensaje.setText(f"La probabilidad de que la película o serie '{Titulo_ES}' sea de interés es de {probabilidad}%.")
         mensaje.setStandardButtons(QMessageBox.Ok)
 
         mensaje.exec_()
@@ -226,7 +243,7 @@ class MainWindow(QMainWindow):
             tipo = "tvSpecial"
 
         if not titulo or not nota:
-            QMessageBox.warning(self, "Datos incompletos", "Rellena todos los campos correctamente.")
+            QMessageBox.warning(self, "Datos incompletos", "Complete todos los campos correctamente.")
             return
 
         puntuacion = round(nota / 10, 1)
@@ -310,7 +327,7 @@ class MainWindow(QMainWindow):
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
-        mensaje.setText(f"Se ha calificado correctamente a {Titulo_ES} con un {nota}.")
+        mensaje.setText(f"La película o serie '{Titulo_ES}' ha sido calificada correctamente con una puntuación de {nota}.")
         mensaje.setStandardButtons(QMessageBox.Ok)
 
         mensaje.exec_()
@@ -413,7 +430,7 @@ class MainWindow(QMainWindow):
 
 
         if not ano_minimo or not nota or not tipos or not sigeneros or not nogeneros:
-            QMessageBox.warning(self, "Datos incompletos", "Rellena todos los campos correctamente.")
+            QMessageBox.warning(self, "Datos incompletos", "Complete todos los campos correctamente.")
             return
 
         datos = {}
@@ -422,7 +439,7 @@ class MainWindow(QMainWindow):
         nota = int(nota)
 
         if not (1900 <= ano_minimo <= datetime.datetime.now().year):
-            QMessageBox.warning(self, "Datos incompletos", f"Introduce un año mínimo de estreno entre 1900 y {datetime.datetime.now().year}.")
+            QMessageBox.warning(self, "Datos incompletos", f"Introduzca un año mínimo de estreno entre 1900 y {datetime.datetime.now().year}.")
             return
 
         if not ano_maximo:
@@ -431,7 +448,7 @@ class MainWindow(QMainWindow):
             ano_maximo = int(ano_maximo)
 
             if not (1900 <= ano_maximo <= datetime.datetime.now().year):
-                QMessageBox.warning(self, "Datos incompletos", f"Introduce un año máximo de estreno entre 1900 y {datetime.datetime.now().year}.")
+                QMessageBox.warning(self, "Datos incompletos", f"Introduzca un año máximo de estreno entre 1900 y {datetime.datetime.now().year}.")
                 return
 
             if ano_minimo > ano_maximo:
@@ -440,7 +457,7 @@ class MainWindow(QMainWindow):
             datos["ano_maximo"] = ano_maximo
 
         if not (1 <= nota <= 100):
-            QMessageBox.warning(self, "Datos incompletos", "Introduce una puntuación mínima entre 1 y 100.")
+            QMessageBox.warning(self, "Datos incompletos", "Introduzca una puntuación mínima entre 1 y 100.")
             return
 
 
@@ -461,7 +478,7 @@ class MainWindow(QMainWindow):
     def initUI1(self):
         container = QWidget()
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Selecciona que quieres hacer", 650), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Seleccione la acción a realizar", 650), alignment=Qt.AlignCenter)
 
         botones1 = z_estilos.crear_layout_grid()
 
@@ -549,9 +566,9 @@ class MainWindow(QMainWindow):
         container.setStyleSheet(z_estilos.form_style)
         layout = z_estilos.crear_layout_vertical()
         if tipo == "puntuar":
-            layout.addWidget(z_estilos.crear_label("Introduce el titulo, el tipo de lo que quieras evaluar y tu nota", 650), alignment=Qt.AlignCenter)
+            layout.addWidget(z_estilos.crear_label("Introduzca el título, el tipo de contenido a evaluar y la puntuación", 650), alignment=Qt.AlignCenter)
         else:
-            layout.addWidget(z_estilos.crear_label("Introduce el titulo y el tipo de lo que predecir", 650), alignment=Qt.AlignCenter)
+            layout.addWidget(z_estilos.crear_label("Introduzca el título y el tipo de contenido para realizar la predicción", 650), alignment=Qt.AlignCenter)
 
         form = QFormLayout()
         form.setLabelAlignment(Qt.AlignRight)
@@ -559,19 +576,19 @@ class MainWindow(QMainWindow):
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(12)
 
-        text_nombre = z_estilos.crear_line("Introduce el titulo", 300)
+        text_nombre = z_estilos.crear_line("Introduzca el título", 450)
 
         combo = QComboBox()
-        combo.addItems(["Pelicula", "Serie", "Mini-Serie", "Especiales de TV"])
-        combo.setFixedWidth(300)
+        combo.addItems(["Película", "Serie", "Mini-serie", "Especiales de TV"])
+        combo.setFixedWidth(450)
         combo.setStyleSheet(z_estilos.combo_style)
 
-        form.addRow(QLabel('Titulo: '), text_nombre)
+        form.addRow(QLabel('Título:'), text_nombre)
 
         text_nota = 0
         if tipo == "puntuar":
-            text_nota = z_estilos.crear_line("Introduce la nota entre 1 y 100", 300, validator=QIntValidator())
-            form.addRow(QLabel('Nota: '), text_nota)
+            text_nota = z_estilos.crear_line("Introduzca la puntuación entre 1 y 100", 450, validator=QIntValidator())
+            form.addRow(QLabel('Puntuación:'), text_nota)
 
         form.addRow(QLabel('Tipo: '), combo)
 
@@ -603,7 +620,7 @@ class MainWindow(QMainWindow):
 
         container = QWidget()
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Selecciona la película o serie correcta", 650), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Seleccione la película o serie correcta", 650), alignment=Qt.AlignCenter)
 
         if lista_evaluaciones:
             for i in lista_evaluaciones:
@@ -694,7 +711,7 @@ class MainWindow(QMainWindow):
         inner_widget.setLayout(layout)
         scroll.setWidget(inner_widget)
 
-        layout.addWidget(z_estilos.crear_label("Selecciona el tipo de título que te gusta", 650), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Seleccione el tipo de título de su preferencia", 650), alignment=Qt.AlignCenter)
         layout.addSpacing(9)
 
         tipos_texto = ["Películas", "Series", "Mini-Series", "Especiales de TV"]
@@ -718,9 +735,9 @@ class MainWindow(QMainWindow):
 
         ano_actual = datetime.datetime.now().year
 
-        text_ano_min = z_estilos.crear_line(f"Introduce un año entre 1900 y {ano_actual}", 350, validator=QIntValidator())
-        text_ano_max = z_estilos.crear_line(f"Introduce un año entre 1900 y por defecto ({ano_actual})", 350, validator=QIntValidator())
-        text_puntuacion = z_estilos.crear_line("Introduce una puntuación entre 1 y 100", 350, validator=QIntValidator(1, 100))
+        text_ano_min = z_estilos.crear_line(f"Introduzca un año entre 1900 y {ano_actual}", 350, validator=QIntValidator())
+        text_ano_max = z_estilos.crear_line(f"Introduzca un año entre 1900 y, por defecto, {ano_actual}", 350, validator=QIntValidator())
+        text_puntuacion = z_estilos.crear_line("Introduzca una puntuación entre 1 y 100", 350, validator=QIntValidator(1, 100))
 
         form.addRow("Año mínimo de estreno:", text_ano_min)
         form.addRow("Año máximo de estreno:", text_ano_max)
@@ -755,8 +772,8 @@ class MainWindow(QMainWindow):
             layout.addSpacing(9)
             return checks
 
-        generos_si = crear_grid_generos("Selecciona los géneros que SÍ te gustan")
-        generos_no = crear_grid_generos("Selecciona los géneros que NO te gustan")
+        generos_si = crear_grid_generos("Seleccione los géneros que SON de su preferencia")
+        generos_no = crear_grid_generos("Seleccione los géneros que NO SON de su preferencia")
 
         botones = z_estilos.crear_layout_horizontal()
 

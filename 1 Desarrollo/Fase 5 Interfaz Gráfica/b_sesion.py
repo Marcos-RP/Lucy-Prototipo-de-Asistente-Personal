@@ -19,10 +19,10 @@ import c_a_aplicacion_inicial, z_estilos
 
 MENSAJE_REGISTRO = """
 <b>Bienvenido a Lucy:</b><br><br>
-Este sistema cuenta con dos funcionalidades básicas:<br><br>
+Este sistema dispone de dos funcionalidades básicas:<br><br>
 <ul>
-    <li><b>Películas</b>: Te permitirá puntuar películas y series en base a lo que se te harán recomendaciones personalizadas y predicciones sobre si te va a gustar un determinado titulo o no.</li><br>
-    <li><b>Chat</b>: Te permitirá mantener una conversación con una IA Generativa que te permitirá crear imágenes, enviar archivos via Telegram, realizar búsquedas en Google y ejecutar comandos en tu ordenador.</li><br>
+    <li><b>Películas</b>: Permite puntuar películas y series, a partir de lo cual se generan recomendaciones personalizadas y predicciones sobre si un determinado título resultará de interés.</li><br>
+    <li><b>Chat</b>: Permite mantener una conversación con una IA generativa capaz de crear imágenes, enviar archivos vía Telegram, realizar búsquedas en Google y ejecutar comandos en el ordenador.</li><br>
 </ul>
 """
 
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Lucy")
         self.setWindowIcon(QIcon("z_icon.png"))
         self.setStyleSheet(z_estilos.setStyleSheet)
-        self.setGeometry(int(width * 0.25), int(height * 0.125), int(width * 0.5), int(height * 0.75))
+        self.setGeometry(int(width * 0.125), int(height * 0.125), int(width * 0.75), int(height * 0.75))
         self.setMinimumSize(800, 500)
 
         self.initUI1()
@@ -65,16 +65,33 @@ class MainWindow(QMainWindow):
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
+        mensaje.setWindowTitle("Lucy — Registro Inicial")
         mensaje.setText(MENSAJE_REGISTRO)
 
         mensaje.setStandardButtons(QMessageBox.Ok)
+        mensaje.button(QMessageBox.Ok).setText("Continuar")
+
         mensaje.setStyleSheet("""
-            QLabel {
-                font-size: 14px;
-                min-width: 750px;
-                min-height: 300px;
-            }
-        """)
+                    QLabel {
+                        color: #000000;
+                        font-size: 18px;
+                        min-width: 800px;
+                        min-height: 360px;
+                        padding: 12px;
+                    }
+
+                    QPushButton {
+                        background-color: #2d89ef;
+                        color: white;
+                        padding: 8px 24px;
+                        border-radius: 6px;
+                        font-size: 18px;
+                    }
+
+                    QPushButton:hover {
+                        background-color: #3aa0ff;
+                    }
+                """)
 
         mensaje.exec_()
 
@@ -108,7 +125,7 @@ class MainWindow(QMainWindow):
         contrasena = datos[1].text().strip()
 
         if not nombre and not contrasena:
-            QMessageBox.warning(self, "Datos incompletos", "Introduce un nombre y contraseña.")
+            QMessageBox.warning(self, "Datos incompletos", "Introduzca un nombre y una contraseña.")
             return
 
         existe = False
@@ -141,21 +158,20 @@ class MainWindow(QMainWindow):
         contrasena = datos[1].text().strip()
         contrasena2 = datos[2].text().strip()
 
-
         if not nombre or not contrasena or not contrasena2:
-            QMessageBox.warning(self, "Datos incompletos", "Rellena todos los campos correctamente.")
+            QMessageBox.warning(self, "Datos incompletos", "Complete todos los campos correctamente.")
             return
 
         if nombre in {u["nombre"] for u in self.encriptacion.datos_descifrados["Datos_Cifrados/users_json.enc"].values()}:
-            QMessageBox.warning(self, "Datos incompletos", "Usuario ya existente.")
+            QMessageBox.warning(self, "Datos incompletos", "El usuario ya existe.")
             return
 
         if contrasena != contrasena2:
-            QMessageBox.warning(self, "Datos incorrectos", "Las contraseñas deben de coincidir.")
+            QMessageBox.warning(self, "Datos incorrectos", "Las contraseñas deben coincidir.")
             return
 
         if len(contrasena) < 6:
-            QMessageBox.warning(self, "Datos incorrectos", "Las contraseña debe de tener al menos 6 caracteres.")
+            QMessageBox.warning(self, "Datos incorrectos", "La contraseña debe tener al menos 6 caracteres.")
             return
 
         archivos = glob.glob(os.path.join("Datos_Cifrados", "*_completo_csv.enc"))
@@ -203,13 +219,14 @@ class MainWindow(QMainWindow):
     def initUI1(self):
         container = QWidget()
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Seleciona que quieres hacer", 450), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Seleccione la acción a realizar", 450), alignment=Qt.AlignCenter)
 
         botones = z_estilos.crear_layout_horizontal()
 
-        btn_registro = z_estilos.crear_boton("Nuevo Usuario", 250)
+        btn_registro = z_estilos.crear_boton("Nuevo usuario", 250)
         btn_registro.clicked.connect(self.initUI2)
-        btn_inicio = z_estilos.crear_boton("Iniciar Sesión", 250)
+
+        btn_inicio = z_estilos.crear_boton("Iniciar sesión", 250)
         btn_inicio.clicked.connect(self.initUI3)
 
         botones.addWidget(btn_registro)
@@ -229,7 +246,7 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setStyleSheet(z_estilos.form_style)
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Completa los campos", 450), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Complete los campos", 450), alignment=Qt.AlignCenter)
 
         form = QFormLayout()
         form.setLabelAlignment(Qt.AlignRight)
@@ -237,13 +254,13 @@ class MainWindow(QMainWindow):
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(12)
 
-        text_nombre = z_estilos.crear_line("Introduce tu nombre de usuario", 400)
-        text_contrasena = z_estilos.crear_line("Introduce tu contraseña de mínimo 6 caracteres", 400, password=True)
-        text_contrasena_2 = z_estilos.crear_line("Confirma la contraseña", 400, password=True)
+        text_nombre = z_estilos.crear_line("Introduzca el nombre de usuario", 400)
+        text_contrasena = z_estilos.crear_line("Introduzca la contraseña (mínimo 6 caracteres)", 400, password=True)
+        text_contrasena_2 = z_estilos.crear_line("Confirme la contraseña", 400, password=True)
 
-        form.addRow(QLabel('Nombre: '), text_nombre)
+        form.addRow(QLabel('Nombre:'), text_nombre)
         form.addRow(QLabel('Contraseña:'), text_contrasena)
-        form.addRow(QLabel('Confirmar Contraseña:'), text_contrasena_2)
+        form.addRow(QLabel('Confirmar contraseña:'), text_contrasena_2)
 
         layout.addLayout(form)
 
@@ -271,7 +288,7 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setStyleSheet(z_estilos.form_style)
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Completa los campos", 450), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Complete los campos", 450), alignment=Qt.AlignCenter)
 
         form = QFormLayout()
         form.setLabelAlignment(Qt.AlignRight)
@@ -279,8 +296,8 @@ class MainWindow(QMainWindow):
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(12)
 
-        text_nombre = z_estilos.crear_line("Introduce tu nombre de usuario", 300)
-        text_contrasena = z_estilos.crear_line("Introduce tu contraseña", 300, password=True)
+        text_nombre = z_estilos.crear_line("Introduzca el nombre de usuario", 300)
+        text_contrasena = z_estilos.crear_line("Introduzca la contraseña", 300, password=True)
 
         form.addRow(QLabel('Nombre: '), text_nombre)
         form.addRow(QLabel('Contraseña:'), text_contrasena)

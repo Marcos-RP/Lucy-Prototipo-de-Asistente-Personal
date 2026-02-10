@@ -78,7 +78,7 @@ QPushButton {
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
 }
 QPushButton:hover {
@@ -93,14 +93,14 @@ QPushButton:pressed {
 label_style = (
     "padding: 6px 14px;"
     "border-radius: 5px;"
-    "font-size: 14px;"
+    "font-size: 18px;"
     "min-height: 25px;"
     "color:  #333;"
     "font-weight: bold;"
 )
 
 
-combo_style = ("font-size: 14px;"
+combo_style = ("font-size: 18px;"
                "padding: 8px 10px;"
                " border: 2px solid #D6C9BE;"
                "border-radius: 6px;"
@@ -113,14 +113,14 @@ form_style = """
 QLabel {
     padding: 6px 14px;
     border-radius: 5px;
-    font-size: 14px;    
+    font-size: 18px;    
     min-height: 25px;
     color: #333;
     font-weight: bold;
 }
 
 QLineEdit {
-    font-size: 14px;
+    font-size: 18px;
     min-height: 24px;
     padding: 8px 10px;
     border: 2px solid #D6C9BE;
@@ -146,5 +146,5 @@ QFormLayout {
 
 checkbox_style = ("padding: 6px 14px;"
                   "border-radius: 5px;"
-                  "font-size: 14px;"
+                  "font-size: 18px;"
                   "color: #333;")

@@ -14,12 +14,15 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 # Carga de clave maestra y versión
 # ============================
 
-LUCY_MASTER_KEY = os.getenv("LUCY_MASTER_KEY")
-LUCY_KEY_VERSION = os.getenv("LUCY_KEY_VERSION")
+#LUCY_MASTER_KEY = os.getenv("LUCY_MASTER_KEY")
+#LUCY_KEY_VERSION = os.getenv("LUCY_KEY_VERSION")
 
-if not all([LUCY_MASTER_KEY, LUCY_KEY_VERSION]):
-    print("ERROR: Faltan variables de entorno. Verifica tus API KEYS.")
-    exit()
+LUCY_MASTER_KEY = "da063b94ab7c57cdb8519d9429a8486eb88fce76807bc46377d70e21a2da4569"
+LUCY_KEY_VERSION = "1"
+
+#if not all([LUCY_MASTER_KEY, LUCY_KEY_VERSION]):
+#    print("ERROR: Faltan variables de entorno. Verifica tus API KEYS.")
+#    exit()
 
 LUCY_MASTER_KEY = bytes.fromhex(LUCY_MASTER_KEY)
 LUCY_KEY_VERSION = LUCY_KEY_VERSION

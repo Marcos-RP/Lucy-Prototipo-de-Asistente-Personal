@@ -2,11 +2,10 @@
 # Importación de librerías
 # ============================
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon
 import speech_recognition as sr
-from PyQt5.QtWidgets import (QMainWindow, QLabel, QWidget, QFormLayout, QMessageBox, QScrollArea, QVBoxLayout, QFrame, QSpacerItem, QSizePolicy, QApplication)
-
+from PyQt5.QtWidgets import (QMainWindow, QLabel, QWidget, QHBoxLayout, QPushButton, QFormLayout, QMessageBox, QScrollArea, QVBoxLayout, QFrame, QSpacerItem, QSizePolicy, QApplication)
 import c_a_aplicacion_inicial, d_c_chat, z_estilos
 
 
@@ -16,13 +15,13 @@ import c_a_aplicacion_inicial, d_c_chat, z_estilos
 # ============================
 
 MENSAJE_INICIAL = """
-<b>Bienvenido a la funcionalidad secundaria de Lucy.</b><br><br>
-Lucy permite tener un chat interactivo vía texto o vía voz que te permite hacer 4 acciones básicas:<br><br>
+<b>Bienvenido a la funcionalidad adicional de Lucy.</b><br><br>
+Lucy ofrece un chat interactivo, tanto por texto como por voz, que permite realizar cuatro acciones básicas:<br><br>
 <ul>
-    <li><b>Generación de imágenes:</b> Puedes generar imágenes en base a unas instrucciones.</li><br>
-    <li><b>Envío de archivos al móvil:</b> Puedes enviar archivos o mensajes a tu móvil a través de la aplicación Telegram.</li><br>
-    <li><b>Búsquedas en Google (Fase Beta):</b> Podrás realizar búsquedas en Google.</li><br>
-    <li><b>Ejecución de comandos (Fase Beta):</b> Podrás ejecutar ciertos comandos de forma automática en tu ordenador.</li><br>
+    <li><b>Generación de imágenes:</b> Se pueden generar imágenes a partir de instrucciones proporcionadas.</li><br>
+    <li><b>Envío de archivos al móvil:</b> Se permite el envío de archivos o mensajes al dispositivo móvil a través de la aplicación Telegram.</li><br>
+    <li><b>Búsquedas en Google:</b> Se pueden realizar búsquedas en Google.</li><br>
+    <li><b>Ejecución de comandos:</b> Se pueden ejecutar determinados comandos de forma automática en el ordenador.</li><br>
 </ul>
 """
 
@@ -72,7 +71,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Lucy")
         self.setWindowIcon(QIcon("z_icon.png"))
         self.setStyleSheet(z_estilos.setStyleSheet)
-        self.setGeometry(int(width * 0.25), int(height * 0.125), int(width * 0.5), int(height * 0.75))
+        self.setGeometry(int(width * 0.125), int(height * 0.125), int(width * 0.75), int(height * 0.75))
         self.setMinimumSize(800, 500)
 
         self.initUI1()
@@ -94,16 +93,34 @@ class MainWindow(QMainWindow):
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
+        mensaje.setWindowTitle("Lucy — Panel de Chat")
         mensaje.setText(MENSAJE_INICIAL)
 
         mensaje.setStandardButtons(QMessageBox.Ok)
+        mensaje.button(QMessageBox.Ok).setText("Continuar")
+
         mensaje.setStyleSheet("""
-                    QLabel {
-                        font-size: 14px;
-                        min-width: 750px;
-                        min-height: 300px;
-                    }
-                """)
+            QLabel {
+                color: #000000;
+                font-size: 18px;
+                min-width: 800px;
+                min-height: 360px;
+                padding: 12px;
+            }
+
+            QPushButton {
+                background-color: #2d89ef;
+                color: white;
+                padding: 8px 24px;
+                border-radius: 6px;
+                font-size: 18px;
+            }
+
+            QPushButton:hover {
+                background-color: #3aa0ff;
+            }
+        """)
+
         mensaje.exec_()
 
 
@@ -191,7 +208,7 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setStyleSheet(z_estilos.form_style)
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Chatea", 200), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Historial de Conversación", 350), alignment=Qt.AlignCenter)
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -217,22 +234,55 @@ class MainWindow(QMainWindow):
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(12)
 
-        text_peticion = z_estilos.crear_line("Escribe", 300)
-        form.addRow(QLabel('Chat: '), text_peticion)
+        text_peticion = z_estilos.crear_line("Escribe un mensaje", 500)
 
-        layout.addLayout(form)
-
-        botones1 = z_estilos.crear_layout_horizontal()
-
-        boton_enviar = z_estilos.crear_boton("Enviar", 250)
+        boton_enviar = QPushButton()
+        boton_enviar.setIcon(QIcon("send.png"))
+        boton_enviar.setIconSize(QSize(22, 22))
+        boton_enviar.setFixedSize(42, 42)
+        boton_enviar.setToolTip("Enviar")
+        boton_enviar.setStyleSheet("""
+            QPushButton {
+                background-color: #00c3ff;
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+                border-radius: 21px;
+            }
+            QPushButton:hover {
+                background-color: #0084ff;
+            }
+        """)
         boton_enviar.clicked.connect(lambda: self.peticion(text_peticion, "texto"))
-        boton_audio = z_estilos.crear_boton("Audio", 250)
+
+        boton_audio = QPushButton()
+        boton_audio.setIcon(QIcon("microfono.png"))
+        boton_audio.setIconSize(QSize(22, 22))
+        boton_audio.setFixedSize(42, 42)
+        boton_audio.setToolTip("Enviar")
+
+        boton_audio.setStyleSheet("""
+            QPushButton {
+                background-color: #ffbb00;
+                color: white;
+                font-size: 16px;
+                border-radius: 21px;
+            }
+            QPushButton:hover {
+                background-color: #ff7b00;
+            }
+        """)
         boton_audio.clicked.connect(lambda: self.peticion(text_peticion, "audio"))
 
-        botones1.addWidget(boton_enviar)
-        botones1.addWidget(boton_audio)
+        # Layout horizontal para input + botones
+        fila_chat = QHBoxLayout()
+        fila_chat.setSpacing(6)
+        fila_chat.addWidget(text_peticion)
+        fila_chat.addWidget(boton_enviar)
+        fila_chat.addWidget(boton_audio)
 
-        layout.addLayout(botones1)
+        form.addRow(QLabel("Chat:"), fila_chat)
+        layout.addLayout(form)
 
         boton_atras = z_estilos.crear_boton("Atrás", 250)
         boton_atras.clicked.connect(self.on_click)

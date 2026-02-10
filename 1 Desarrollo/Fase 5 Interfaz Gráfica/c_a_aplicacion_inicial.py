@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Lucy")
         self.setWindowIcon(QIcon("z_icon.png"))
         self.setStyleSheet(z_estilos.setStyleSheet)
-        self.setGeometry(int(width * 0.25), int(height * 0.125), int(width * 0.5), int(height * 0.75))
+        self.setGeometry(int(width * 0.125), int(height * 0.125), int(width * 0.75), int(height * 0.75))
         self.setMinimumSize(800, 500)
 
         print("Inicio sesión:", self.nombre)
@@ -78,16 +78,19 @@ class MainWindow(QMainWindow):
     def initUI1(self):
         container = QWidget()
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Seleciona que quieres hacer", 450), alignment=Qt.AlignCenter)
+        layout.addWidget(z_estilos.crear_label("Seleccione la acción a realizar", 450), alignment=Qt.AlignCenter)
 
         botones = z_estilos.crear_layout_grid()
 
         btn_titulos = z_estilos.crear_boton("Películas", 250)
         btn_titulos.clicked.connect(self.peliculas)
+
         btn_chat = z_estilos.crear_boton("Chat", 250)
         btn_chat.clicked.connect(self.chat)
-        btn_sesion = z_estilos.crear_boton("Cambio Sesión", 250)
+
+        btn_sesion = z_estilos.crear_boton("Cambiar sesión", 250)
         btn_sesion.clicked.connect(self.on_click1)
+
         boton_cerrar = z_estilos.crear_boton("Cerrar", 250)
         boton_cerrar.clicked.connect(self.close)
 
