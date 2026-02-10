@@ -626,7 +626,7 @@ class MainWindow(QMainWindow):
             for i in lista_evaluaciones:
                 botones = QHBoxLayout()
 
-                label = z_estilos.crear_label(f"Opción {i[0]}: {i[1]} -- {i[2]} ({i[3]})", 500)
+                label = z_estilos.crear_label(f"Opción {i[0]}: {i[1]} -- {i[2]} ({i[3]})", 800)
 
                 button1 = z_estilos.crear_boton("Seleccionar", 250)
                 if tipo == "puntuar":
@@ -735,9 +735,9 @@ class MainWindow(QMainWindow):
 
         ano_actual = datetime.datetime.now().year
 
-        text_ano_min = z_estilos.crear_line(f"Introduzca un año entre 1900 y {ano_actual}", 350, validator=QIntValidator())
-        text_ano_max = z_estilos.crear_line(f"Introduzca un año entre 1900 y, por defecto, {ano_actual}", 350, validator=QIntValidator())
-        text_puntuacion = z_estilos.crear_line("Introduzca una puntuación entre 1 y 100", 350, validator=QIntValidator(1, 100))
+        text_ano_min = z_estilos.crear_line(f"Introduzca un año entre 1900 y {ano_actual}", 450, validator=QIntValidator())
+        text_ano_max = z_estilos.crear_line(f"Introduzca un año entre 1900 y, por defecto, {ano_actual}", 450, validator=QIntValidator())
+        text_puntuacion = z_estilos.crear_line("Introduzca una puntuación entre 1 y 100", 450, validator=QIntValidator(1, 100))
 
         form.addRow("Año mínimo de estreno:", text_ano_min)
         form.addRow("Año máximo de estreno:", text_ano_max)
@@ -748,7 +748,7 @@ class MainWindow(QMainWindow):
 
         def crear_grid_generos(titulo):
             layout.addWidget(
-                z_estilos.crear_label(titulo, 450),
+                z_estilos.crear_label(titulo, 650),
                 alignment=Qt.AlignCenter
             )
 

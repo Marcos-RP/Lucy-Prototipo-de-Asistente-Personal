@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         self.id = id
 
         self.setWindowTitle("Lucy")
-        self.setWindowIcon(QIcon("z_icon.png"))
+        self.setWindowIcon(QIcon("data/z_icon.png"))
         self.setStyleSheet(z_estilos.setStyleSheet)
         self.setGeometry(int(width * 0.125), int(height * 0.125), int(width * 0.75), int(height * 0.75))
         self.setMinimumSize(800, 500)
@@ -162,7 +162,7 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Datos incompletos", "Complete todos los campos correctamente.")
             return
 
-        if nombre in {u["nombre"] for u in self.encriptacion.datos_descifrados["Datos_Cifrados/users_json.enc"].values()}:
+        if nombre in {u["nombre"] for u in self.encriptacion.datos_descifrados["data/users_json.enc"].values()}:
             QMessageBox.warning(self, "Datos incompletos", "El usuario ya existe.")
             return
 
