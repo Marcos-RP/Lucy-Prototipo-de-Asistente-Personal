@@ -576,7 +576,7 @@ class MainWindow(QMainWindow):
         text_nombre = z_estilos.crear_line("Introduzca el título", 450)
 
         combo = QComboBox()
-        combo.addItems(["Película", "Serie", "Mini-serie", "Especiales de TV"])
+        combo.addItems(["Pelicula", "Serie", "Mini-serie", "Especiales de TV"])
         combo.setFixedWidth(450)
         combo.setStyleSheet(z_estilos.combo_style)
 
