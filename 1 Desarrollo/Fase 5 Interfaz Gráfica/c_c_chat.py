@@ -157,7 +157,11 @@ class MainWindow(QMainWindow):
             try:
                 QApplication.processEvents()
                 if tipo == "texto":
-                    peticion, respuesta = d_c_chat.ejecutar_peticion(self.lucy, conversacion.text().strip())
+                    texto_usuario = conversacion.text().strip()
+                    peticion, respuesta = d_c_chat.ejecutar_peticion(self.lucy, texto_usuario)
+
+                    conversacion.clear()
+
                 else:
                     peticion, respuesta = d_c_chat.ejecutar_peticion(self.lucy, conversacion)
             finally:
@@ -196,9 +200,6 @@ class MainWindow(QMainWindow):
         if conversacion == "Error":
             QMessageBox.warning(self, "Error Micrófono", "No se ha detectado un micrófono.")
 
-        self.initUI1()
-
-
 
     # ============================
     # Interfaz gráfica del chat interactivo
@@ -234,7 +235,10 @@ class MainWindow(QMainWindow):
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(12)
 
-        text_peticion = z_estilos.crear_line("Escribe un mensaje", 500)
+        self.text_peticion = z_estilos.crear_line("Escribe un mensaje", 500)
+        self.text_peticion.returnPressed.connect(
+            lambda: self.peticion(self.text_peticion, "texto")
+        )
 
         boton_enviar = QPushButton()
         boton_enviar.setIcon(QIcon("send.png"))
@@ -253,7 +257,7 @@ class MainWindow(QMainWindow):
                 background-color: #0084ff;
             }
         """)
-        boton_enviar.clicked.connect(lambda: self.peticion(text_peticion, "texto"))
+        boton_enviar.clicked.connect(lambda: self.peticion(self.text_peticion, "texto"))
 
         boton_audio = QPushButton()
         boton_audio.setIcon(QIcon("microfono.png"))
@@ -272,12 +276,12 @@ class MainWindow(QMainWindow):
                 background-color: #ff7b00;
             }
         """)
-        boton_audio.clicked.connect(lambda: self.peticion(text_peticion, "audio"))
+        boton_audio.clicked.connect(lambda: self.peticion(self.text_peticion, "audio"))
 
         # Layout horizontal para input + botones
         fila_chat = QHBoxLayout()
         fila_chat.setSpacing(6)
-        fila_chat.addWidget(text_peticion)
+        fila_chat.addWidget(self.text_peticion)
         fila_chat.addWidget(boton_enviar)
         fila_chat.addWidget(boton_audio)
 

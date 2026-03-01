@@ -617,9 +617,10 @@ class MainWindow(QMainWindow):
 
         container = QWidget()
         layout = z_estilos.crear_layout_vertical()
-        layout.addWidget(z_estilos.crear_label("Seleccione la película o serie correcta", 650), alignment=Qt.AlignCenter)
 
         if lista_evaluaciones:
+            layout.addWidget(z_estilos.crear_label("Seleccione la película o serie correcta", 650),
+                             alignment=Qt.AlignCenter)
             for i in lista_evaluaciones:
                 botones = QHBoxLayout()
 
@@ -627,9 +628,11 @@ class MainWindow(QMainWindow):
 
                 button1 = z_estilos.crear_boton("Seleccionar", 250)
                 if tipo == "puntuar":
-                    button1.clicked.connect(lambda checked=False, tid=i[5], Titulo_ES=i[1]: self.puntuar(tid, Titulo_ES, nota))
+                    button1.clicked.connect(
+                        lambda checked=False, tid=i[5], Titulo_ES=i[1]: self.puntuar(tid, Titulo_ES, nota))
                 else:
-                    button1.clicked.connect(lambda checked=False, tid=i[5], Titulo_ES=i[1]: self.prediccion(Titulo_ES, tid))
+                    button1.clicked.connect(
+                        lambda checked=False, tid=i[5], Titulo_ES=i[1]: self.prediccion(Titulo_ES, tid))
 
                 button2 = z_estilos.crear_boton("Más información", 250)
                 button2.clicked.connect(lambda checked, url=i[4]: abrir_url(url))
@@ -639,8 +642,8 @@ class MainWindow(QMainWindow):
                 botones.addWidget(button2)
                 layout.addLayout(botones)
         else:
-            label = z_estilos.crear_label("No ha habido coincidencias", 350)
-            layout.addWidget(label)
+            label = z_estilos.crear_label("No ha habido coincidencias", 550)
+            layout.addWidget(label, alignment=Qt.AlignHCenter)
 
         boton = z_estilos.crear_boton("Atrás", 250)
         boton.clicked.connect(lambda: self.initUI3(tipo))

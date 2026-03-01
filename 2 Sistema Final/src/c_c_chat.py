@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
 
         if tipo == "audio":
             conversacion = reconocer_voz()
-            # print(f"Tú (Voz): {conversacion}")
+            #print(f"Tú (Voz): {conversacion}")
 
         if tipo == "texto":
             if conversacion.text().strip() == "":
@@ -157,11 +157,15 @@ class MainWindow(QMainWindow):
             try:
                 QApplication.processEvents()
                 if tipo == "texto":
-                    peticion, respuesta = d_c_chat.ejecutar_peticion(self.lucy, conversacion.text().strip())
+                    texto_usuario = conversacion.text().strip()
+                    peticion, respuesta = d_c_chat.ejecutar_peticion(self.lucy, texto_usuario)
+
+                    conversacion.clear()
+
                 else:
                     peticion, respuesta = d_c_chat.ejecutar_peticion(self.lucy, conversacion)
             finally:
-                QApplication.restoreOverrideCursor()
+                    QApplication.restoreOverrideCursor()
 
             texto = QFrame()
             texto.setStyleSheet("""
@@ -194,9 +198,6 @@ class MainWindow(QMainWindow):
 
         if conversacion == "Error":
             QMessageBox.warning(self, "Error Micrófono", "No se ha detectado un micrófono.")
-
-        self.initUI1()
-
 
 
     # ============================
@@ -233,50 +234,53 @@ class MainWindow(QMainWindow):
         form.setHorizontalSpacing(12)
         form.setVerticalSpacing(12)
 
-        text_peticion = z_estilos.crear_line("Escribe un mensaje", 500)
+        self.text_peticion = z_estilos.crear_line("Escribe un mensaje", 500)
+        self.text_peticion.returnPressed.connect(
+            lambda: self.peticion(self.text_peticion, "texto")
+        )
 
         boton_enviar = QPushButton()
-        boton_enviar.setIcon(QIcon("data/send.png"))
+        boton_enviar.setIcon(QIcon("send.png"))
         boton_enviar.setIconSize(QSize(22, 22))
         boton_enviar.setFixedSize(42, 42)
         boton_enviar.setToolTip("Enviar")
         boton_enviar.setStyleSheet("""
-                    QPushButton {
-                        background-color: #00c3ff;
-                        color: white;
-                        font-size: 18px;
-                        font-weight: bold;
-                        border-radius: 21px;
-                    }
-                    QPushButton:hover {
-                        background-color: #0084ff;
-                    }
-                """)
-        boton_enviar.clicked.connect(lambda: self.peticion(text_peticion, "texto"))
+            QPushButton {
+                background-color: #00c3ff;
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+                border-radius: 21px;
+            }
+            QPushButton:hover {
+                background-color: #0084ff;
+            }
+        """)
+        boton_enviar.clicked.connect(lambda: self.peticion(self.text_peticion, "texto"))
 
         boton_audio = QPushButton()
-        boton_audio.setIcon(QIcon("data/microfono.png"))
+        boton_audio.setIcon(QIcon("microfono.png"))
         boton_audio.setIconSize(QSize(22, 22))
         boton_audio.setFixedSize(42, 42)
         boton_audio.setToolTip("Enviar")
 
         boton_audio.setStyleSheet("""
-                    QPushButton {
-                        background-color: #ffbb00;
-                        color: white;
-                        font-size: 16px;
-                        border-radius: 21px;
-                    }
-                    QPushButton:hover {
-                        background-color: #ff7b00;
-                    }
-                """)
-        boton_audio.clicked.connect(lambda: self.peticion(text_peticion, "audio"))
+            QPushButton {
+                background-color: #ffbb00;
+                color: white;
+                font-size: 16px;
+                border-radius: 21px;
+            }
+            QPushButton:hover {
+                background-color: #ff7b00;
+            }
+        """)
+        boton_audio.clicked.connect(lambda: self.peticion(self.text_peticion, "audio"))
 
         # Layout horizontal para input + botones
         fila_chat = QHBoxLayout()
         fila_chat.setSpacing(6)
-        fila_chat.addWidget(text_peticion)
+        fila_chat.addWidget(self.text_peticion)
         fila_chat.addWidget(boton_enviar)
         fila_chat.addWidget(boton_audio)
 
