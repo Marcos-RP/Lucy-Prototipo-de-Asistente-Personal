@@ -150,6 +150,25 @@ class MainWindow(QMainWindow):
         if tipo == "texto":
             if conversacion.text().strip() == "":
                 QMessageBox.warning(self, "Datos incompletos", "Introduce una consulta.")
+                QMessageBox.setStyleSheet("""
+                                                QLabel {
+                                                    color: #000000;
+                                                    font-size: 16px;
+                                                    padding: 12px;
+                                                }
+
+                                                QPushButton {
+                                                    background-color: #2d89ef;
+                                                    color: white;
+                                                    padding: 8px 24px;
+                                                    border-radius: 6px;
+                                                    font-size: 18px;
+                                                }
+
+                                                QPushButton:hover {
+                                                    background-color: #3aa0ff;
+                                                }
+                                            """)
                 return
 
         if conversacion != "Error":
@@ -198,6 +217,25 @@ class MainWindow(QMainWindow):
 
         if conversacion == "Error":
             QMessageBox.warning(self, "Error Micrófono", "No se ha detectado un micrófono.")
+            QMessageBox.setStyleSheet("""
+                                QLabel {
+                                    color: #000000;
+                                    font-size: 16px;
+                                    padding: 12px;
+                                }
+
+                                QPushButton {
+                                    background-color: #2d89ef;
+                                    color: white;
+                                    padding: 8px 24px;
+                                    border-radius: 6px;
+                                    font-size: 18px;
+                                }
+
+                                QPushButton:hover {
+                                    background-color: #3aa0ff;
+                                }
+                            """)
 
 
     # ============================
@@ -240,7 +278,7 @@ class MainWindow(QMainWindow):
         )
 
         boton_enviar = QPushButton()
-        boton_enviar.setIcon(QIcon("send.png"))
+        boton_enviar.setIcon(QIcon("data/send.png"))
         boton_enviar.setIconSize(QSize(22, 22))
         boton_enviar.setFixedSize(42, 42)
         boton_enviar.setToolTip("Enviar")
@@ -259,7 +297,7 @@ class MainWindow(QMainWindow):
         boton_enviar.clicked.connect(lambda: self.peticion(self.text_peticion, "texto"))
 
         boton_audio = QPushButton()
-        boton_audio.setIcon(QIcon("microfono.png"))
+        boton_audio.setIcon(QIcon("data/microfono.png"))
         boton_audio.setIconSize(QSize(22, 22))
         boton_audio.setFixedSize(42, 42)
         boton_audio.setToolTip("Enviar")

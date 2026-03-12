@@ -176,6 +176,25 @@ class MainWindow(QMainWindow):
                 rec = self.usuario_peliculas.recomendacion()
             else:
                 QMessageBox.warning(self, "Datos insuficientes", "Se requiere al menos una película o serie puntuada.")
+                QMessageBox.setStyleSheet("""
+                                    QLabel {
+                                        color: #000000;
+                                        font-size: 16px;
+                                        padding: 12px;
+                                    }
+
+                                    QPushButton {
+                                        background-color: #2d89ef;
+                                        color: white;
+                                        padding: 8px 24px;
+                                        border-radius: 6px;
+                                        font-size: 18px;
+                                    }
+
+                                    QPushButton:hover {
+                                        background-color: #3aa0ff;
+                                    }
+                                """)
                 return
         else:
             rec = self.usuario_peliculas.busqueda_concreta(datos)
@@ -205,6 +224,25 @@ class MainWindow(QMainWindow):
                 QApplication.restoreOverrideCursor()
         else:
             QMessageBox.warning(self, "Datos insuficientes", "Se requiere al menos una película o serie puntuada.")
+            QMessageBox.setStyleSheet("""
+                                                QLabel {
+                                                    color: #000000;
+                                                    font-size: 16px;
+                                                    padding: 12px;
+                                                }
+
+                                                QPushButton {
+                                                    background-color: #2d89ef;
+                                                    color: white;
+                                                    padding: 8px 24px;
+                                                    border-radius: 6px;
+                                                    font-size: 18px;
+                                                }
+
+                                                QPushButton:hover {
+                                                    background-color: #3aa0ff;
+                                                }
+                                            """)
             return
 
         mensaje = QMessageBox(self)
@@ -212,8 +250,28 @@ class MainWindow(QMainWindow):
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
-        mensaje.setText(f"La probabilidad de que la película o serie '{Titulo_ES}' sea de interés es de {probabilidad}%.")
+        mensaje.setText(f"La probabilidad de que la película o serie <b>'{Titulo_ES}'</b> sea de interés es de <b>{probabilidad}%</b>.")
         mensaje.setStandardButtons(QMessageBox.Ok)
+
+        mensaje.setStyleSheet("""
+                    QLabel {
+                        color: #000000;
+                        font-size: 16px;
+                        padding: 12px;
+                    }
+
+                    QPushButton {
+                        background-color: #2d89ef;
+                        color: white;
+                        padding: 8px 24px;
+                        border-radius: 6px;
+                        font-size: 18px;
+                    }
+
+                    QPushButton:hover {
+                        background-color: #3aa0ff;
+                    }
+                """)
 
         mensaje.exec_()
 
@@ -244,6 +302,25 @@ class MainWindow(QMainWindow):
 
         if not titulo or not nota:
             QMessageBox.warning(self, "Datos incompletos", "Complete todos los campos correctamente.")
+            QMessageBox.setStyleSheet("""
+                                                QLabel {
+                                                    color: #000000;
+                                                    font-size: 16px;
+                                                    padding: 12px;
+                                                }
+
+                                                QPushButton {
+                                                    background-color: #2d89ef;
+                                                    color: white;
+                                                    padding: 8px 24px;
+                                                    border-radius: 6px;
+                                                    font-size: 18px;
+                                                }
+
+                                                QPushButton:hover {
+                                                    background-color: #3aa0ff;
+                                                }
+                                            """)
             return
 
         puntuacion = round(nota / 10, 1)
@@ -326,8 +403,28 @@ class MainWindow(QMainWindow):
         mensaje.setTextFormat(Qt.RichText)
 
         mensaje.setIcon(QMessageBox.NoIcon)
-        mensaje.setText(f"La película o serie '{Titulo_ES}' ha sido calificada correctamente con una puntuación de {nota}.")
+        mensaje.setText(f"La película o serie <b>'{Titulo_ES}'</b> ha sido calificada correctamente con una puntuación de <b>{nota}</b>.")
         mensaje.setStandardButtons(QMessageBox.Ok)
+
+        mensaje.setStyleSheet("""
+                    QLabel {
+                        color: #000000;
+                        font-size: 16px;
+                        padding: 12px;
+                    }
+
+                    QPushButton {
+                        background-color: #2d89ef;
+                        color: white;
+                        padding: 8px 24px;
+                        border-radius: 6px;
+                        font-size: 18px;
+                    }
+
+                    QPushButton:hover {
+                        background-color: #3aa0ff;
+                    }
+                """)
 
         mensaje.exec_()
 
@@ -430,6 +527,25 @@ class MainWindow(QMainWindow):
 
         if not ano_minimo or not nota or not tipos or not sigeneros or not nogeneros:
             QMessageBox.warning(self, "Datos incompletos", "Complete todos los campos correctamente.")
+            QMessageBox.setStyleSheet("""
+                                                QLabel {
+                                                    color: #000000;
+                                                    font-size: 16px;
+                                                    padding: 12px;
+                                                }
+
+                                                QPushButton {
+                                                    background-color: #2d89ef;
+                                                    color: white;
+                                                    padding: 8px 24px;
+                                                    border-radius: 6px;
+                                                    font-size: 18px;
+                                                }
+
+                                                QPushButton:hover {
+                                                    background-color: #3aa0ff;
+                                                }
+                                            """)
             return
 
         datos = {}
@@ -439,6 +555,25 @@ class MainWindow(QMainWindow):
 
         if not (1900 <= ano_minimo <= datetime.datetime.now().year):
             QMessageBox.warning(self,"Datos incompletos",f"Introduzca un año mínimo de estreno entre 1900 y {datetime.datetime.now().year}.")
+            QMessageBox.setStyleSheet("""
+                                                QLabel {
+                                                    color: #000000;
+                                                    font-size: 16px;
+                                                    padding: 12px;
+                                                }
+
+                                                QPushButton {
+                                                    background-color: #2d89ef;
+                                                    color: white;
+                                                    padding: 8px 24px;
+                                                    border-radius: 6px;
+                                                    font-size: 18px;
+                                                }
+
+                                                QPushButton:hover {
+                                                    background-color: #3aa0ff;
+                                                }
+                                            """)
             return
 
         if not ano_maximo:
@@ -448,15 +583,72 @@ class MainWindow(QMainWindow):
 
             if not (1900 <= ano_maximo <= datetime.datetime.now().year):
                 QMessageBox.warning(self,"Datos incompletos",f"Introduzca un año máximo de estreno entre 1900 y {datetime.datetime.now().year}.")
+                QMessageBox.setStyleSheet("""
+                                                    QLabel {
+                                                        color: #000000;
+                                                        font-size: 16px;
+                                                        padding: 12px;
+                                                    }
+
+                                                    QPushButton {
+                                                        background-color: #2d89ef;
+                                                        color: white;
+                                                        padding: 8px 24px;
+                                                        border-radius: 6px;
+                                                        font-size: 18px;
+                                                    }
+
+                                                    QPushButton:hover {
+                                                        background-color: #3aa0ff;
+                                                    }
+                                                """)
                 return
 
             if ano_minimo > ano_maximo:
                 QMessageBox.warning(self,"Datos incompletos","El año mínimo no puede ser mayor que el año máximo.")
+                QMessageBox.setStyleSheet("""
+                                                    QLabel {
+                                                        color: #000000;
+                                                        font-size: 16px;
+                                                        padding: 12px;
+                                                    }
+
+                                                    QPushButton {
+                                                        background-color: #2d89ef;
+                                                        color: white;
+                                                        padding: 8px 24px;
+                                                        border-radius: 6px;
+                                                        font-size: 18px;
+                                                    }
+
+                                                    QPushButton:hover {
+                                                        background-color: #3aa0ff;
+                                                    }
+                                                """)
                 return
             datos["ano_maximo"] = ano_maximo
 
         if not (1 <= nota <= 100):
             QMessageBox.warning(self,"Datos incompletos","Introduzca una puntuación mínima entre 1 y 100.")
+            QMessageBox.setStyleSheet("""
+                                                QLabel {
+                                                    color: #000000;
+                                                    font-size: 16px;
+                                                    padding: 12px;
+                                                }
+
+                                                QPushButton {
+                                                    background-color: #2d89ef;
+                                                    color: white;
+                                                    padding: 8px 24px;
+                                                    border-radius: 6px;
+                                                    font-size: 18px;
+                                                }
+
+                                                QPushButton:hover {
+                                                    background-color: #3aa0ff;
+                                                }
+                                            """)
             return
 
         datos["tipos"] = tipos
